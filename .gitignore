@@ -1,0 +1,8 @@
+*.orig
+documentation/*
+!documentation/
+!documentation/documentation.tex
+!documentation/Makefile
+*.pdf
+submission.zip
+catch*
