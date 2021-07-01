@@ -1,0 +1,10 @@
+{
+    "makefile.extensionOutputFolder": "./.vscode",
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "\\c\\Users\\mint8\\vscode source\\FinalProject",
+            "binaryPath": "\\c\\Users\\mint8\\vscode source\\FinalProject\\main",
+            "binaryArgs": []
+        }
+    ]
+}
