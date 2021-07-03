@@ -6,5 +6,5 @@
 class StackEval{
 
 public:
-    static double evaluate(std::vector<std::string>& tokens);
+    static double evaluate(const std::vector<std::string>& tokens);
 };
