@@ -1,22 +1,24 @@
+#pragma once
+#include <chrono>
 
 class Timer {
-private:
-	unsigned long time;
-public:
-	Timer() {
+	private:
+		std::chrono::time_point<std::chrono::high_resolution_clock> startTime;
+		std::chrono::duration<double, std::milli> duration;
+	public:
+		Timer() {
+		}
 
-	}
+		void start() {
+			startTime = std::chrono::high_resolution_clock::now();
+		}
 
-	void start() {
+		void stop() {
+			duration += std::chrono::high_resolution_clock::now() - startTime;
+		}
 
-	}
-
-	void stop() {
-
-	}
-
-	unsigned long getDuration() {
-		return 0;
-	}
-
+		std::chrono::duration<double, std::milli> getDuration() {
+			return duration;
+		}
+		
 };
