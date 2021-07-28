@@ -28,6 +28,9 @@ enum Algorithm {
 	STACK = 0, TREE, PRIORITY_QUEUE
 };
 
+bool isWithinTolerance(double calculated, double expected, int tolerance) {
+	return std::abs((calculated - expected) / expected) < std::pow(10, tolerance);
+}
 
 void handleSingleEntry(Algorithm alg) {
 	std::string expression;
@@ -85,16 +88,18 @@ void handleBatch(std::string& filename) {
 	input.open(filename);
 
 	std::vector<std::string>* expressionsTokens = new std::vector<std::string>[linesCount];
+	double* answers = new double[linesCount];
 
 	for(int i = 0; i < linesCount; i++) {
-		std::string line;
-		double answer;
-		input >> answer;
+		input >> answers[i];
 
 		//Clear comma
-		std::string comma;
-		input >> comma;
+		while(input.peek() == ',' || std::isspace(input.peek())) {
+			char temp;
+			input.read(&temp, 1);
+		}
 
+		std::string line;
 		std::getline(input, line);
 		Parser::parse(line, expressionsTokens[i]);
 	}
@@ -115,6 +120,9 @@ void handleBatch(std::string& filename) {
 	}
 
 	Timer stackTimer, treeTimer, priorityQueueTimer;
+	unsigned long int stackCorrect = 0;
+	unsigned long int treeCorrect = 0;
+	unsigned long int priorityQueueCorrect = 0;
 
 	for(int i : order) {
 		switch(i) {
@@ -123,7 +131,7 @@ void handleBatch(std::string& filename) {
 
 				for(int i = 0; i < linesCount; i++) {
 					double answer = StackEval::evaluate(expressionsTokens[i]);
-
+					stackCorrect += isWithinTolerance(answers[i], answer, -5);
 				}
 
 				stackTimer.stop();
@@ -135,6 +143,7 @@ void handleBatch(std::string& filename) {
 
 				for(int i = 0; i < linesCount; i++) {
 					double answer = TreeEval::evaluate(expressionsTokens[i]);
+					treeCorrect += isWithinTolerance(answers[i], answer, -5);
 
 				}
 
@@ -147,6 +156,7 @@ void handleBatch(std::string& filename) {
 
 				for(int i = 0; i < linesCount; i++) {
 					double answer = PriorityQueueEval::evaluate(expressionsTokens[i]);
+					priorityQueueCorrect += isWithinTolerance(answers[i], answer, -5);
 
 				}
 
@@ -157,8 +167,7 @@ void handleBatch(std::string& filename) {
 	}
 
 	delete[] expressionsTokens;
-
-
+	delete[] answers;
 
 	//Table output
 	//Probably should have this in a separate method
@@ -167,8 +176,8 @@ void handleBatch(std::string& filename) {
 	{
 		stackOutput.push_back("Stack");
 		stackOutput.push_back("Time: " + std::to_string(stackTimer.getDuration().count()) + "ms");
-		stackOutput.push_back("Correct: 100000");
-		stackOutput.push_back("Incorrect: 0");
+		treeOutput.push_back("Correct: " + std::to_string(stackCorrect));
+		stackOutput.push_back("Incorrect: " + std::to_string(linesCount - stackCorrect));
 
 	}
 
@@ -176,8 +185,8 @@ void handleBatch(std::string& filename) {
 	{
 		treeOutput.push_back("Tree");
 		treeOutput.push_back("Time: " + std::to_string(treeTimer.getDuration().count()) + "ms");
-		treeOutput.push_back("Correct: 100000");
-		treeOutput.push_back("Incorrect: 0");
+		treeOutput.push_back("Correct: " + std::to_string(treeCorrect));
+		treeOutput.push_back("Incorrect: " + std::to_string(linesCount - treeCorrect));
 
 	}
 
@@ -185,8 +194,8 @@ void handleBatch(std::string& filename) {
 	{
 		priorityQueueOutput.push_back("Priority Queue");
 		priorityQueueOutput.push_back("Time: " + std::to_string(priorityQueueTimer.getDuration().count()) + "ms");
-		priorityQueueOutput.push_back("Correct: 100000");
-		priorityQueueOutput.push_back("Incorrect: 0");
+		priorityQueueOutput.push_back("Correct: " + std::to_string(priorityQueueCorrect));
+		priorityQueueOutput.push_back("Incorrect: " + std::to_string(linesCount - priorityQueueCorrect));
 	}
 
 

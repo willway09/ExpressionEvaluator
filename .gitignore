@@ -9,3 +9,6 @@ catch*
 main
 main.exe
 *.o
+expressions.csv
+expressions.js
+expressions

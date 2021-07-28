@@ -1,4 +1,6 @@
 #include "Parser.h"
+#include <iostream>
+#include <fstream>
 
 void Parser::parse(std::string expression, std::vector<std::string>& tokens) {
     std::stringstream tokenizer(expression);
