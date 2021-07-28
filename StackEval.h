@@ -7,7 +7,7 @@
 #include <cmath>
 #include <iostream>
 
-class StackEval{
+class StackEval {
 
     static std::unordered_map<std::string, int> precedenceMap;
     static std::unordered_set<std::string> operators;

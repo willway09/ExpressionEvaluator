@@ -6,5 +6,5 @@
 class Parser {
 
 public:
-    static void parse(std::string expression, std::vector<std::string>& tokens);
+	static void parse(std::string expression, std::vector<std::string>& tokens);
 };
