@@ -1,22 +1,22 @@
 
 class Timer {
-	private:
-		unsigned long time;
-	public:
-		Timer() {
+private:
+	unsigned long time;
+public:
+	Timer() {
 
-		}
+	}
 
-		void start() {
+	void start() {
 
-		}
+	}
 
-		void stop() {
+	void stop() {
 
-		}
+	}
 
-		unsigned long getDuration() {
-			return 0;
-		}
-		
+	unsigned long getDuration() {
+		return 0;
+	}
+
 };

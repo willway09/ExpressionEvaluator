@@ -87,9 +87,14 @@ void handleBatch(std::string& filename) {
 
 	for(int i = 0; i < linesCount; i++) {
 		std::string line;
-		std::getline(input, line);
-		//NEED TO ISOLATE DOUBLE ANSWER AFTER COMMA FROM EXPRESSION
+		double answer;
+		input >> answer;
 
+		//Clear comma
+		std::string comma;
+		input >> comma;
+
+		std::getline(input, line);
 		Parser::parse(line, expressionsTokens[i]);
 	}
 

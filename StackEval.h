@@ -3,8 +3,8 @@
 #include <vector>
 #include <stack>
 
-class StackEval{
+class StackEval {
 
 public:
-    static double evaluate(const std::vector<std::string>& tokens);
+	static double evaluate(const std::vector<std::string>& tokens);
 };
