@@ -26,4 +26,4 @@ doc:
 	cp documentation/documentation.pdf .
 expressions: expressions.cpp
 	g++ -g -o expressions expressions.cpp
-	./expressions > expressions.csv
+	./expressions 4324 > expressions.csv
