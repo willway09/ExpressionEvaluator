@@ -176,7 +176,7 @@ void handleBatch(std::string& filename) {
 	{
 		stackOutput.push_back("Stack");
 		stackOutput.push_back("Time: " + std::to_string(stackTimer.getDuration().count()) + "ms");
-		treeOutput.push_back("Correct: " + std::to_string(stackCorrect));
+		stackOutput.push_back("Correct: " + std::to_string(stackCorrect));
 		stackOutput.push_back("Incorrect: " + std::to_string(linesCount - stackCorrect));
 
 	}
