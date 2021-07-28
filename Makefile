@@ -15,6 +15,7 @@ clean:
 	@rm *.o
 	@rm documentation.pdf
 	@rm submission.zip
+	@rm expressions expressions.js expressions.csv
 	@rm *.orig
 lint:
 	astyle --style=java -t -xn -xc -xl -F -p -xg -U -k1 -j -S *.cpp *.h
@@ -23,4 +24,6 @@ zip: doc
 doc:
 	make -C documentation
 	cp documentation/documentation.pdf .
-
+expressions: expressions.cpp
+	g++ -g -o expressions expressions.cpp
+	./expressions > expressions.csv
