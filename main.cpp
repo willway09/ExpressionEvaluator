@@ -20,6 +20,7 @@ void printMenu() {
 	std::cout << "2. Evaluate expression using binary tree" << std::endl;
 	std::cout << "3. Evaluate expression using priority queue" << std::endl;
 	std::cout << "4. Batch evaluation of file" << std::endl;
+	std::cout << "-1. Quit" << std::endl;
 	std::cout << "Choice: ";
 }
 
@@ -87,9 +88,14 @@ void handleBatch(std::string& filename) {
 
 	for(int i = 0; i < linesCount; i++) {
 		std::string line;
-		std::getline(input, line);
-		//NEED TO ISOLATE DOUBLE ANSWER AFTER COMMA FROM EXPRESSION
+		double answer;
+		input >> answer;
 
+		//Clear comma
+		std::string comma;
+		input >> comma;
+
+		std::getline(input, line);
 		Parser::parse(line, expressionsTokens[i]);
 	}
 
@@ -155,12 +161,12 @@ void handleBatch(std::string& filename) {
 
 
 	//Table output
-	//Probably should have this in a separte method
+	//Probably should have this in a separate method
 	std::vector<std::string> stackOutput, treeOutput, priorityQueueOutput;
 
 	{
 		stackOutput.push_back("Stack");
-		stackOutput.push_back("Time: " + std::to_string(stackTimer.getDuration()));
+		stackOutput.push_back("Time: " + std::to_string(stackTimer.getDuration().count()) + "ms");
 		stackOutput.push_back("Correct: 100000");
 		stackOutput.push_back("Incorrect: 0");
 
@@ -169,7 +175,7 @@ void handleBatch(std::string& filename) {
 
 	{
 		treeOutput.push_back("Tree");
-		treeOutput.push_back("Time: " + std::to_string(treeTimer.getDuration()));
+		treeOutput.push_back("Time: " + std::to_string(treeTimer.getDuration().count()) + "ms");
 		treeOutput.push_back("Correct: 100000");
 		treeOutput.push_back("Incorrect: 0");
 
@@ -178,7 +184,7 @@ void handleBatch(std::string& filename) {
 
 	{
 		priorityQueueOutput.push_back("Priority Queue");
-		priorityQueueOutput.push_back("Time: " + std::to_string(priorityQueueTimer.getDuration()));
+		priorityQueueOutput.push_back("Time: " + std::to_string(priorityQueueTimer.getDuration().count()) + "ms");
 		priorityQueueOutput.push_back("Correct: 100000");
 		priorityQueueOutput.push_back("Incorrect: 0");
 	}
@@ -236,9 +242,9 @@ void handleBatch(std::string& filename) {
 
 	//Print upper line
 	printDashes(stackMaxLength);
-	std::cout << "”";
+	std::cout << "ï¿½";
 	printDashes(treeMaxLength);
-	std::cout << "”";
+	std::cout << "ï¿½";
 	printDashes(priorityQueueMaxLength);
 	std::cout << std::endl;
 
@@ -257,9 +263,9 @@ void handleBatch(std::string& filename) {
 
 	//Print lower line
 	printDashes(stackMaxLength);
-	std::cout << "”";
+	std::cout << "ï¿½";
 	printDashes(treeMaxLength);
-	std::cout << "”";
+	std::cout << "ï¿½";
 	printDashes(priorityQueueMaxLength);
 	std::cout << std::endl;
 
@@ -309,6 +315,10 @@ int main(int argc, char** argv) {
 			case 4: {
 				handleBatch();
 				break;
+			}
+
+			case -1: {
+				return 0;
 			}
 		}
 

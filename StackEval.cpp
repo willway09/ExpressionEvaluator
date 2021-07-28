@@ -28,7 +28,6 @@ void StackEval::convert(const std::vector<std::string>& tokens, std::vector<std:
                 postfix.push_back(operators.top());
                 operators.pop();
             }
-            std::cout << "pushing onto operator stack: " << *iter << std::endl;
             operators.push(*iter);
         } else if (*iter == "(") {
             // left parentheses
