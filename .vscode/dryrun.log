@@ -1,5 +1,9 @@
 make.exe --dry-run --keep-going --print-directory
 make: Entering directory '/c/Users/mint8/vscode source/FinalProject'
+g++ -g -c -o Parser.o Parser.cpp
+ 
+g++ -g -c -o StackEval.o StackEval.cpp
+ 
 g++ -g -o main main.cpp Parser.o StackEval.o PriorityQueueEval.o TreeEval.o Operator.o
 make: Leaving directory '/c/Users/mint8/vscode source/FinalProject'
  
