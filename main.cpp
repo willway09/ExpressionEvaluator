@@ -251,9 +251,9 @@ void handleBatch(std::string& filename) {
 
 	//Print upper line
 	printDashes(stackMaxLength);
-	std::cout << "�";
+	std::cout << "-";
 	printDashes(treeMaxLength);
-	std::cout << "�";
+	std::cout << "-";
 	printDashes(priorityQueueMaxLength);
 	std::cout << std::endl;
 
@@ -272,9 +272,9 @@ void handleBatch(std::string& filename) {
 
 	//Print lower line
 	printDashes(stackMaxLength);
-	std::cout << "�";
+	std::cout << "-";
 	printDashes(treeMaxLength);
-	std::cout << "�";
+	std::cout << "-";
 	printDashes(priorityQueueMaxLength);
 	std::cout << std::endl;
 
