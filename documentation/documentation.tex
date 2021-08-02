@@ -19,6 +19,7 @@
 \usepackage{siunitx}
 \usepackage{esint}
 \usepackage{cancel}
+\usepackage{hyperref}
 
 % colors
 \usepackage{xcolor}
@@ -81,5 +82,82 @@ We may even align several equations, at the \texttt{\&} symbol placed before the
 \section{to conclude, one last item}
 I added a package which allows us to $\highlight{\text{highlight}}$ (default is pink) math. Here the math is actually text since I marked it as text, but we can highlight math in other colors; for example, \[\highlight[b]{O\br{f(n)-n^{7/6}}}.\]
 
-For now we can leave this here but when we begin documentation after everything is said and done, remove everything above this line. I am unsure what components above will be useful in our documentation but otherwise it should be good.
+For now we can leave this here but when we begin documentation after everything is said and done, remove everything above this line. I am unsure what components above will be useful in our documentation but otherwise it should be good. \newpage
+
+\textbf{Team Name:} Team 27 \hspace*{1cm} \textbf{Team Members:} Saisudharshan Sivakumar, Richard McCoy
+
+\textbf{GitHub:} \href{https://github.com/}{link} \hspace*{1.7cm} \textbf{Video:} \href{https://youtube.com/}{link}
+
+\textbf{Project Title:} Expression Evaluation
+
+\section*{Refined Proposal}
+
+\subsection*{Problem:}
+
+\subsection*{Motivation:}
+
+\subsection*{Features:}
+
+\subsection*{Data:}
+
+\subsection*{Tools:}
+
+\subsection*{Data Structures:}
+
+\subsection*{Responsibilities/Roles:}
+
+\section*{Analysis}
+
+\subsection*{Changes:}
+
+\subsection*{Complexity Analysis:}
+
+\centerline{General}
+First, some variables should be defined.
+Let $o$ be the number of operators in an expression, $n$ be the number of operands (numbers) in the expression, $d$ be the depth of the expression (number of nested expressions), and $p$ be the number of open (or closed, as they must match) parentheses in the expression.
+These parsers only deal with binary operators. Each operator thus takes two operands, which can either be numbers or expressions involving operands and operators (excluding parentheses, which are treated separately from operators here).
+These expressions are subject to the same rules, which thus means that, for a given expression, $n=o+1$, and that $O(n)=O(d)$.
+Thus, these can effectively be used interchangably when analyzing complexity.
+
+Parentheses count is independent of $n$ and $o$, though expression depth can be in certain cases.
+Note that, in this context, depth is defined as the maximum ammount of nesting of expressions in a given expression, and is achieved with parentheses.
+Given a parentheses count $p$, the greatest depth which can be achieved is also $p$, which occurs when each subexpression contains a single subexpression itself.
+Examples include ($p=3$):
+\[(((5 + 3 * 2)))\]
+\[(((5) + 3 )* 2)\]
+Similarly, the lowest possible depth for a given $p$ arises from the pidgenhole principle, and equals 
+\[ ceil(\frac {p} {n}) \]
+Cases for these occur when parenthesis are as ``distributed'' as possible.
+The simplest case for this occurs when every number is ``wrapped'' once, but more parenthesis are in the expression, as seen:
+\[((5)) + (3) * (2) - (5) / (2)\]
+By pidgenhole, some numbers must be ``wrapped'' again to meet the given $p$.
+Admittedly, the fact that parenthesis can wrap multiple numbers complicates this a bit, but the intuition still holds.
+Thus, in the worst case $d$ is $O(p)$, while in the best case it is $O(p/n)$.
+
+\centerline{Priority Queue Implementation}
+The priority queue implementation has two primary sections.
+The first constructs the operator priority queue from the expression, and constructs a new expression vector by removing the parentheses.
+The second recursively evaluates the new expression vector using this priority queue.
+
+In the first part, the expression vector reconstruction creates a vector of length $o + n - 2 p$.
+Because $push_back()$ in a vector is constant in time, this portion is $O(o-p)$ in the worst case.
+It also handles $2p$ parentheses in constant time, which is $O(p)$.
+Finally, it inserts $o$ operators into a priority queue, which is known to be $O(o*log(o))$ by a priority queue's properties in the worst case.
+Combining these portions together, the net complexity of this method is $O(o*log(o))$.
+
+In the second part, each operator is evaluated recursively.
+To do this,
+Because each operator must be visited, this portionko
+
+\section*{Reflection}
+
+\subsection*{Experience:}
+
+\subsection*{Challenges:}
+
+\subsection*{Hypothetically starting over?:}
+
+\subsection*{What we learned:}
+
+\section*{References}
 \end{document}
