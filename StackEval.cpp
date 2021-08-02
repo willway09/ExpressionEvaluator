@@ -1,5 +1,36 @@
 #include "StackEval.h"
 
+// Node constructors
+StackEval::Node::Node(double _value) {
+	value = _value;
+	prev = nullptr;
+	isNumber = true;
+}
+
+StackEval::Node::Node(std::string _binaryOperator) {
+	binaryOperator = _binaryOperator;
+	prev = nullptr;
+	isNumber = false;
+}
+
+StackEval::smallStack::smallStack(){
+	top = nullptr;
+}
+
+void StackEval::smallStack::pop(){
+	if (top != nullptr) {
+		Node* temp = top;
+		top = top->prev;
+		delete temp;
+	}
+}
+
+void StackEval::smallStack::push(Node* node){
+		Node* temp = top;
+		top = node;
+		node->prev = temp;
+}
+
 // initialize precedenceMap
 std::unordered_map<std::string, int> StackEval::precedenceMap = { {"+", 2}, {"-", 2}, {"*", 3}, {"/", 3}, {"^", 5}};
 
@@ -13,104 +44,82 @@ int StackEval::comparePrecedence(std::string op1, std::string op2) {
 
 // pass in valid tokenized infix expression
 // Dijkstra's shunting yard algorithm
-void StackEval::convert(const std::vector<std::string>& tokens, std::vector<std::string>& postfix) {
-	std::stack<std::string> operators;
+void StackEval::convert(const std::vector<std::string>& tokens, std::vector<Node*>& postfix) {
+	smallStack operators;
 	char* end = nullptr;
-
 	for(auto iter = tokens.begin(); iter != tokens.end(); ++iter) {
 		// determine if the token is a double
 		double number = std::strtod((*iter).c_str(), &end);
-
 		if(end != (*iter).c_str() && *end == '\0' && number != HUGE_VAL) {
 			// the token is a number
-			postfix.push_back(*iter);
-
+			Node* numberNode = new Node(number);
+			postfix.push_back(numberNode);
 		} else if(StackEval::operators.count(*iter) != 0) {
-			// assert that the non-number tokens are valid tokens; see Parser.cpp
-			while(operators.size() != 0 && operators.top() != "(" && (comparePrecedence(operators.top(), *iter) > 0 || (comparePrecedence(operators.top(), *iter) == 0 && *iter != "^"))) {
-				postfix.push_back(operators.top());
+			// assert that the non-number tokens are valid tokens
+			while(operators.top != nullptr && operators.top->binaryOperator != "(" && (comparePrecedence(operators.top->binaryOperator, *iter) > 0 || (comparePrecedence(operators.top->binaryOperator, *iter) == 0 && *iter != "^"))) {
+				Node* shuntOp = new Node(operators.top->binaryOperator);
+				postfix.push_back(shuntOp);
 				operators.pop();
 			}
-
-			operators.push(*iter);
-
+			Node* operatorNode = new Node(*iter);
+			operators.push(operatorNode);
 		} else if(*iter == "(") {
 			// left parentheses
-			operators.push(*iter);
-
+			Node* operatorNode = new Node(*iter);
+			operators.push(operatorNode);
 		} else if(*iter == ")") {
 			// right parentheses; assume there is a corresponding left parenthesis
-			while(operators.top() != "(") {
-				postfix.push_back(operators.top());
+			while(operators.top->binaryOperator != "(") {
+				Node* shuntOp = new Node(operators.top->binaryOperator);
+				postfix.push_back(shuntOp);
 				operators.pop();
 			}
-
 			operators.pop();
 		}
 	}
-
 	// move remaining operators
-	while(operators.size() != 0) {
-		postfix.push_back(operators.top());
+	while(operators.top != nullptr) {
+		Node* shuntOp = new Node(operators.top->binaryOperator);
+		postfix.push_back(shuntOp);
 		operators.pop();
 	}
-
-	// debug print postfix expression
-	/*
-	for (int i = 0; i < postfix.size(); i++) {
-	    std::cout << postfix[i];
-	    if (i < postfix.size()-1) {
-	        std::cout << " ";
-	    }
-	}
-	std::cout << std::endl;
-	*/
 }
 
 // pass in valid tokenized infix expression
 double StackEval::evaluate(const std::vector<std::string>& tokens) {
 	// convert to postfix notation first
-	std::vector<std::string> postfix;
+	std::vector<Node*> postfix;
 	StackEval::convert(tokens, postfix);
 	// parse expression
-	std::stack<double> operands;
-	char* end = nullptr;
-
-	for(auto iter = postfix.begin(); iter != postfix.end(); ++iter) {
+	smallStack operands;
+	for(int i = 0; i < postfix.size(); i++) {
 		// determine if the token is a double
-		double number = std::strtod((*iter).c_str(), &end);
-
-		if(end != (*iter).c_str() && *end == '\0' && number != HUGE_VAL) {
+		if(postfix[i]->isNumber) {
 			// the token is a number
-			operands.push(number);
-
-		} else if(StackEval::operators.count(*iter) != 0) {
+			operands.push(postfix[i]);
+		} else if(StackEval::operators.count(postfix[i]->binaryOperator) != 0) {
 			// the token is an operator
 			double output = 0;
-			double right = operands.top();
+			double right = operands.top->value;
 			operands.pop();
-			double left = operands.top();
+			double left = operands.top->value;
 			operands.pop();
-
-			if(*iter == "+") {
+			if(postfix[i]->binaryOperator == "+") {
 				output = left + right;
-
-			} else if(*iter == "-") {
+			} else if(postfix[i]->binaryOperator == "-") {
 				output = left - right;
-
-			} else if(*iter == "*") {
+			} else if(postfix[i]->binaryOperator == "*") {
 				output = left * right;
-
-			} else if(*iter == "/") {
+			} else if(postfix[i]->binaryOperator == "/") {
 				output = left / right;
-
-			} else if(*iter == "^") {
+			} else if(postfix[i]->binaryOperator == "^") {
 				output = pow(left, right);
 			}
-
-			operands.push(output);
+			Node* outputNode = new Node(output);
+			operands.push(outputNode);
 		}
 	}
-
-	return operands.top();
+	double toReturn = operands.top->value;
+	operands.pop();
+	return toReturn;
 }
