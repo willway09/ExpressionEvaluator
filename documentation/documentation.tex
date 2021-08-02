@@ -112,6 +112,49 @@ For now we can leave this here but when we begin documentation after everything 
 
 \subsection*{Complexity Analysis:}
 
+\centerline{General}
+First, some variables should be defined.
+Let $o$ be the number of operators in an expression, $n$ be the number of operands (numbers) in the expression, $d$ be the depth of the expression (number of nested expressions), and $p$ be the number of open (or closed, as they must match) parentheses in the expression.
+These parsers only deal with binary operators. Each operator thus takes two operands, which can either be numbers or expressions involving operands and operators (excluding parentheses, which are treated separately from operators here).
+These expressions are subject to the same rules, which thus means that, for a given expression, $n=o+1$, and that $O(n)=O(o)$.
+Thus, these can effectively be used interchangably when analyzing complexity.
+
+Parentheses count is independent of $n$ and $o$, though expression depth can be in certain cases.
+Note that, in this context, depth is defined as the maximum ammount of nesting of expressions in a given expression, and is achieved with parentheses.
+Given a parentheses count $p$, the greatest depth which can be achieved is also $p$, which occurs when each subexpression contains a single subexpression itself.
+Examples include ($p=3$):
+\[(((5 + 3 * 2)))\]
+\[(((5) + 3 )* 2)\]
+Similarly, the lowest possible depth for a given $p$ arises from the pidgenhole principle, and equals 
+\[ ceil(\frac {p} {n}) \]
+Cases for these occur when parenthesis are as ``distributed'' as possible.
+The simplest case for this occurs when every number is ``wrapped'' once, but more parenthesis are in the expression, as seen:
+\[((5)) + (3) * (2) - (5) / (2)\]
+By pidgenhole, some numbers must be ``wrapped'' again to meet the given $p$.
+Admittedly, the fact that parenthesis can wrap multiple numbers complicates this a bit, but the intuition still holds.
+Thus, in the worst case $d$ is $O(p)$, while in the best case it is $O(p/n)$.
+
+\centerline{Priority Queue Implementation}
+The priority queue implementation has two primary sections.
+The first constructs the operator priority queue from the expression, and constructs a new expression vector by removing the parentheses.
+The second recursively evaluates the new expression vector using this priority queue.
+
+In the first part, the expression vector reconstruction creates a vector of length $o + n - 2 p$.
+Because $push_back()$ in a vector is constant in time, this portion is $O(o-p)$ in the worst case.
+It also handles $2p$ parentheses in constant time, which is $O(p)$.
+Finally, it inserts $o$ operators into a priority queue, which is known to be $O(o*log(o))$ by a priority queue's properties in the worst case.
+Combining these portions together, the net complexity of this method is $O(o*log(o))$.
+
+In the second part, each operator is evaluated recursively.
+This recursion is analgous to a full binary tree, created on the stack, where each operator has two child expressions.
+At each branch, the priority queue is broken into two priority queues: one for the operators in the first child expression, and one for the second.
+However, depending on the position of the operator in the expression, and it's priority based on it's nesting, one child could contain many more operators than the other.
+If this happens recursively (for example, say each time the left child has 1 operator and the right child has the remaining), this constitutes the worst case.
+Intuitively speaking, this corresponds to a highly unbalanced tree.
+Each queue duplication will therefore take $O(o*log(o)$ to go through and $O(o*log(o))$ to reconstruct (this is in contrast to a best case, "balanced" tree, where each time the size of the queue would half - thus, the recursion would converge to the base cases more rapidly).
+This must happen for each operator, and all other portions of the recursion occur in constant time.
+Thus, the net complexity of this method is $O(o^2*log(o))$.
+
 \section*{Reflection}
 
 \subsection*{Experience:}
