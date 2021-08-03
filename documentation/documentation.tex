@@ -20,6 +20,12 @@
 \usepackage{esint}
 \usepackage{cancel}
 \usepackage{hyperref}
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=blue,      
+	urlcolor=blue,
+}
 
 % colors
 \usepackage{xcolor}
@@ -99,16 +105,44 @@ For now we can leave this here but when we begin documentation after everything 
 \subsection*{Features:}
 
 \subsection*{Data:}
+We randomly generated the mathematical expressions which we will test our code on.
+We wrote an algorithm to do this recursively - essentially, we started with a random chain of operators (with some maximum length), then for each operand recursively decide to either return a value or another chain of operators and operands.
+We set a maximum depth for the recursion of 5, somewhat heuristically, because it seemed to give a good distribution of small and large expressions.
+This expression was then evaluated (using JavaScript - see \textbf{Tools}), and output along with the expression string in a CSV format.
+In this dataset, the first column contained the correct answers (as floating point values, though really as strings that needed to be parsed) contained the expressions (as strings).
 
-\subsection*{Tools:}
+We used C++ to write our code, because of its object-oriented design, and because it represents a common language between us.
+We collaborated on our code using GitHub, and wrote our documentation in \LaTeX.
+We compiled our code using the GNU Compiler Collection (g++), and our build tool was be GNU Make.
+Finally, we preemptively evaluated each expression using JavaScript (to verify our program has the correct output), because as an interpreted language it is proficient in evaluating expressions entered as strings.
+This was done using NodeJS.
 
-\subsection*{Data Structures:}
+\subsection*{Data Structures/Algorithms implemented and used:}
+The stack based evaluator had a primitive linked list implementation of a stack, with a minimal interface (it and its nodes were structs and the only functions written were to \texttt{push} and \texttt{pop}).
+The tree based evaluator generated a full abstract syntax tree without an interface (there were only nodes linked to either two children or no children).
+The tree evaluator's functions for evaluation handled building the full tree and traversing the tree.
+
+The priority queue based evaluator did not use a priority queue implemented from scratch (the other \textit{two} evaluators have original implementations), but used an algorithm thought of by Will, not Dijkstra.
+
+Both the stack based evaluator and the tree based evaluator used Sai's implementation of Dijkstra's shunting yard algorithm, tailored to fit each of these data structures.
+The method of evaluation of the expression after being converted to postfix form (evaluation uses stacks) or tree form was a different algorithm that used the properties of the stack or tree (traversal differences).
+
+Other data structures used in some form or another were the STL stack (used in the tree evaluator, not the stack evaluator), priority queue, vector, unordered map, and unordered set.
 
 \subsection*{Responsibilities/Roles:}
+Saisudharshan (\textbf{Sai}) was responsible for the stack implementation and the tree implementation, the timing mechanism, the initial expression tokenizer/parser, and the template/structure of this document.
+Richard (\textbf{Will}) was responsible for the priority queue implementation, the command line interface and TUI, the random expression (with correct answers via JavaScript) dataset generator, the GitHub repository and the video.
+Both of us worked together on deciding the design choices for the project, as well as the documentation contents of course.
+
+\noindent\makebox[\linewidth]{\rule{19.1cm}{0.4pt}}
 
 \section*{Analysis}
 
 \subsection*{Changes:}
+We decided not to handle confirming if passed in expressions were valid or not, because of our time getting tighter and wanting to focus on the data structures and algorithms part of the project instead of the more ``front-end'' issues, at the cost of cleanliness/robustness.
+We also did not end up using the Catch2 framework to test our data, since we already had integrated output validation into the batch testing portion of the TUI, and we had a JavaScript-based evaluation to compare our calculators' answers to (surely for $100,000+$ random valid expressions evaluating correctly, it means we wrote the algorithms correctly).
+We also had a few responsibilities shift simply due to convenience/serendipity, but this did not change the amount of labor allocated to each person (we still maintained a 50/50 balance).
+There were also trivial changes to the visuals of the command line interface.
 
 \subsection*{Complexity Analysis:}
 
@@ -119,31 +153,25 @@ These parsers only deal with binary operators. Each operator thus takes two oper
 These expressions are subject to the same rules, which thus means that, for a given expression, $n=o+1$, and that $O(n)=O(o)$.
 Thus, these can effectively be used interchangably when analyzing complexity.
 
-Parentheses count is independent of $n$ and $o$, though expression depth can be in certain cases.
-Note that, in this context, depth is defined as the maximum ammount of nesting of expressions in a given expression, and is achieved with parentheses.
-Given a parentheses count $p$, the greatest depth which can be achieved is also $p$, which occurs when each subexpression contains a single subexpression itself.
-Examples include ($p=3$):
-\[(((5 + 3 * 2)))\]
-\[(((5) + 3 )* 2)\]
-Similarly, the lowest possible depth for a given $p$ arises from the pidgenhole principle, and equals 
-\[ ceil(\frac {p} {n}) \]
-Cases for these occur when parenthesis are as ``distributed'' as possible.
-The simplest case for this occurs when every number is ``wrapped'' once, but more parenthesis are in the expression, as seen:
-\[((5)) + (3) * (2) - (5) / (2)\]
-By pidgenhole, some numbers must be ``wrapped'' again to meet the given $p$.
-Admittedly, the fact that parenthesis can wrap multiple numbers complicates this a bit, but the intuition still holds.
-Thus, in the worst case $d$ is $O(p)$, while in the best case it is $O(p/n)$.
+\centerline{Parsing infix expressions}
+In the \texttt{Parser} class, infix expressions passed in as a string of length $\ell$ are tokenized, in the form of a vector (each element in the vector is a token).
+
+An \textbf{important} note about the form of these expressions: Every symbol and number (where numbers can be negative) must be separated from each other with a whitespace, because this would ensure that we do not have to decide whether the \texttt{-} sign is used to mean the unary operator or the binary operator.
+
+Returning to the complexity analysis, the time complexity of tokenizing the infix expression in all cases is $O(\ell)$.
+This is because we have to traverse through the string and extract characters, then push each into a vector.
+The vector representing the tokenized expression then has a size represented by what should be approximately $\ell / 2 = o + n + 2p$, because half the characters are spaces, which are rejected.
 
 \centerline{Priority Queue Implementation}
 The priority queue implementation has two primary sections.
 The first constructs the operator priority queue from the expression, and constructs a new expression vector by removing the parentheses.
 The second recursively evaluates the new expression vector using this priority queue.
 
-In the first part, the expression vector reconstruction creates a vector of length $o + n - 2 p$.
-Because $push_back()$ in a vector is constant in time, this portion is $O(o-p)$ in the worst case.
+In the first part, the expression vector reconstruction creates a vector of length $o + n$.
+Because \texttt{push\_back()} in a vector is constant in time, this portion is $O(o)$ in the worst case.
 It also handles $2p$ parentheses in constant time, which is $O(p)$.
-Finally, it inserts $o$ operators into a priority queue, which is known to be $O(o*log(o))$ by a priority queue's properties in the worst case.
-Combining these portions together, the net complexity of this method is $O(o*log(o))$.
+Finally, it inserts $o$ operators into a priority queue, which is known to be $O(o\log(o))$ by a priority queue's properties in the worst case.
+Combining these portions together, the net complexity of this method is $O(o\log(o))$.
 
 In the second part, each operator is evaluated recursively.
 This recursion is analgous to a full binary tree, created on the stack, where each operator has two child expressions.
@@ -151,9 +179,23 @@ At each branch, the priority queue is broken into two priority queues: one for t
 However, depending on the position of the operator in the expression, and it's priority based on it's nesting, one child could contain many more operators than the other.
 If this happens recursively (for example, say each time the left child has 1 operator and the right child has the remaining), this constitutes the worst case.
 Intuitively speaking, this corresponds to a highly unbalanced tree.
-Each queue duplication will therefore take $O(o*log(o)$ to go through and $O(o*log(o))$ to reconstruct (this is in contrast to a best case, "balanced" tree, where each time the size of the queue would half - thus, the recursion would converge to the base cases more rapidly).
+Each queue duplication will therefore take $O(o\log(o))$ to go through and $O(o\log(o))$ to reconstruct (this is in contrast to a best case, ``balanced'' tree, where each time the size of the queue would halve - thus, the recursion would converge to the base cases more rapidly).
 This must happen for each operator, and all other portions of the recursion occur in constant time.
-Thus, the net complexity of this method is $O(o^2*log(o))$.
+Thus, the net complexity of this method is $O(o^2\log(o))$.
+
+\centerline{Stack Implementation}
+Then in Sai's stack based evaluator the complexity of converting the tokenized expression into postfix notation is going to be around $O(o+n+p) = O(o+p)$ (since $n=o+1$) in the worst case.
+This is because for each token we either send the token to the \texttt{postfix} vector or to the \texttt{operators} stack and later pop and potentially push onto the \texttt{postfix} vector (the shunting takes constant time).
+Finally, to evaluate the postfix expression we use two stacks and then the complexity is $O(o+n) = O(o)$ since the length of the \texttt{postfix} vector must be $o+n$ (as there are no parentheses), and traversing through this vector leads to one of two situations (either push a number onto the stack or push the result of an operation on the top two items on the stack) which take constant time complexity each.
+Hence the overall time complexity of using the stack evaluator entirely is going to be $O(o+p)$ after tokenizing the infix expression.
+
+\centerline{Abstract Syntax Tree Implementation}
+In Sai's tree based evaluator we have a similar situation where a very similar algorithm is used to convert the tokenized expression into an abstract syntax tree.
+Again the same argument is used to claim that this part of the algorithm is $O(o+n+p)$ complexity, as again we traverse through the tokenized vector and either build a node in space freely, or build a node and link it to two children at some point, each of these taking constant time complexity.
+Then in actually evaluating the expression when it's in the form of an abstract syntax tree (containing $o+n$ nodes), we traverse to the bottom most node which has two numerical children and in constant time complexity replace the parent with the result of the operation on the children, and delete the children.
+This happens recursively, and so by design this node simplification should only occur as many times as there are ``operator'' nodes. We already stated above that the tree contains $o+n$ nodes, and clearly only $o$ of them are operator nodes. Hence the time complexity of traversing up the tree is $O(o)$. This means that the overall time complexity of using the tree based evaluator is again also $O(o+n+p)$, despite having a slightly slower runtime.
+
+\noindent\makebox[\linewidth]{\rule{19.1cm}{0.4pt}}
 
 \section*{Reflection}
 
