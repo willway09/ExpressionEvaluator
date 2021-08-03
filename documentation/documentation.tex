@@ -114,7 +114,7 @@ Both of us worked together on deciding the design choices for the project, as we
 \section*{Analysis}
 
 \subsection*{Changes:}
-We decided not to handle confirming if passed in expressions were valid or not, because of our time getting tighter and wanting to focus on the data structures and algorithms part of the project instead of the more ``front-end'' issues, at the cost of cleanliness/robustness.
+We decided not to handle confirming if passed in expressions were valid or not, because of our time getting tighter and wanting to focus on the data structures and algorithms part of the project instead of the more ``front-end'' issues, at the cost of cleanliness/robustness (see Parsing infix expressions).
 We also did not end up using the Catch2 framework to test our data since we already had Javascript to compare our calculators' answers to (surely for $100,000+$ random valid expressions evaluating correctly, it means we wrote the algorithms correctly).
 We also had a few responsibilities shift simply due to convenience/serendipity, but this did not change the amount of labor allocated to each person (we still maintained a 50/50 balance).
 There were also trivial changes to the visuals of the command line interface.
@@ -155,7 +155,7 @@ At each branch, the priority queue is broken into two priority queues: one for t
 However, depending on the position of the operator in the expression, and it's priority based on it's nesting, one child could contain many more operators than the other.
 If this happens recursively (for example, say each time the left child has 1 operator and the right child has the remaining), this constitutes the worst case.
 Intuitively speaking, this corresponds to a highly unbalanced tree.
-Each queue duplication will therefore take $O(o\log(o))$ to go through and $O(o\log(o))$ to reconstruct (this is in contrast to a best case, "balanced" tree, where each time the size of the queue would halve - thus, the recursion would converge to the base cases more rapidly).
+Each queue duplication will therefore take $O(o\log(o))$ to go through and $O(o\log(o))$ to reconstruct (this is in contrast to a best case, ``balanced'' tree, where each time the size of the queue would halve - thus, the recursion would converge to the base cases more rapidly).
 This must happen for each operator, and all other portions of the recursion occur in constant time.
 Thus, the net complexity of this method is $O(o^2\log(o))$.
 
@@ -176,12 +176,16 @@ This happens recursively, and so by design this node simplification should only 
 \section*{Reflection}
 
 \subsection*{Experience:}
+As a group the experience was very nice, and everyone in the group was amicable. Things were done on time, and we did not have to nag each other to complete anything. We did have to ease up on some of the functionality of the program due to time (juggling other classes) but otherwise it went well.
 
 \subsection*{Challenges:}
+In terms of the project there were no unusual challenges, but for dealing with GitHub, there was a bit of a learning curve for Sai because he was not familiar with how Git works or how to use it with the command line.
 
 \subsection*{Hypothetically starting over?:}
+If we were to start over we should try to set more aggressive deadlines so that we can do more of the ``front-end'' work involving the user interface (i.e. being able to catch incorrect expressions). We should have also tried for the stack evaluator and the tree evaluator to make a more fleshed out implementation for the stack and abstract syntax tree, so that their code does not get muddled up with the code meant for housing the shunting yard algorithms. We were pretty okay with separating/encapsulating functionality this time, but it could have been better.
 
 \subsection*{What we learned:}
+So in particular Sai learned how to use GitHub, and also how to use GitHub via the command line as well, which was good experience. We also learned that we probably should have gotten a third person to work on the project so that some of the other functionalities could be implemented in parallel to our work, to save time.
 
 \noindent\makebox[\linewidth]{\rule{19.1cm}{0.4pt}}
 

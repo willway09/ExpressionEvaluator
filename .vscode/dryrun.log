@@ -5,7 +5,7 @@ g++ -g -c -o Parser.o Parser.cpp
 g++ -g -c -o StackEval.o StackEval.cpp
  
 g++ -g -c -o TreeEval.o TreeEval.cpp
- 
 g++ -g -o main main.cpp Parser.o StackEval.o PriorityQueueEval.o TreeEval.o Operator.o
+ 
 make: Leaving directory '/c/Users/mint8/vscode source/FinalProject'
  
