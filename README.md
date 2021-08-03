@@ -12,6 +12,5 @@ Expressions can be generated using the `make expressions` command. This commmand
 To compile the program, simply run `make`. The program can be executed in a standalone fashion, using simply `./main`, and presents a simple TUI which exposes expression evaluators for each algorithm and batch evaluation. It can also be run with an argument, i.e. `./main expressions.csv`, which will just run batch evaluation on that file, and then exit.
 
 # Video
-A video for the project can be seen here:
-
+A video for the project is included in the repository (titled "FinalProjectVideo.mp4"), and can also be seen here:
 http://willmccoy.xyz/FinalProjectVideo.mp4
