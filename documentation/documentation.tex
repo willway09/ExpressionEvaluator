@@ -62,88 +62,92 @@
 \setcounter{page}{1}
 
 \begin{document}
-\section{This is a section.}
-This is text, but this is \textit{inline} math: $2\exp(x), x\in\sbr{a,b}$. Observe that things which are usually taller are shrunk, like $\frac{1}{2}, \sum_k, \mathcal{E}\br{1-e^{\frac{-t}{RC}}}, \int_a^b f(x)\dd{x}$.
-
-This is more text, but we can follow with \textit{display mode} math that looks like \[\int_{\gamma}f(z)\dd{z} = 2\pi i \sum_k\Res(f,a_k) ,\] and we end the sentence here.
-
-\subsection{Test subsection}
-If we have a rather \textbf{large} expression for whatever reason, we can try splitting it over multiple lines.
-
-Observe that we can split \begin{multline*}
-    c_1\cos(4\log(x)) + c_2\sin(4\log(x)) -\br{1+\frac{1}{2}+\frac{1}{4}+\cdots+\frac{1}{2^k}} \\ +\exp(\int p(x)\dd{x}) + \eval{uv}_a^b - \int_a^b v\dd{u} + \lim_{\beta \to \infty}\frac{1}{2\pi i}\int_{\gamma - i\beta}^{\gamma + i\beta}e^{zt}f(z)\dd{z}
-\end{multline*} like so.
-
-We may even align several equations, at the \texttt{\&} symbol placed before the $=$ sign. \begin{align*}
-    c_1x+c_2y &= 0 \\
-    c_1x-c_2y &= 0
-\end{align*}
-
-\section{to conclude, one last item}
-I added a package which allows us to $\highlight{\text{highlight}}$ (default is pink) math. Here the math is actually text since I marked it as text, but we can highlight math in other colors; for example, \[\highlight[b]{O\br{f(n)-n^{7/6}}}.\]
-
-For now we can leave this here but when we begin documentation after everything is said and done, remove everything above this line. I am unsure what components above will be useful in our documentation but otherwise it should be good. \newpage
-
 \textbf{Team Name:} Team 27 \hspace*{1cm} \textbf{Team Members:} Saisudharshan Sivakumar, Richard McCoy
 
-\textbf{GitHub:} \href{https://github.com/}{link} \hspace*{1.7cm} \textbf{Video:} \href{https://youtube.com/}{link}
+\textbf{GitHub:} \href{https://github.com/willway09/FinalProject}{https://github.com/willway09/FinalProject} \textbf{Video:} \href{http://willmccoy.xyz/FinalProjectVideo.mp4}{http://willmccoy.xyz/FinalProjectVideo.mp4}
 
 \textbf{Project Title:} Expression Evaluation
 
-\section*{Refined Proposal}
+\noindent\makebox[\linewidth]{\rule{19.1cm}{0.4pt}}
+
+\section*{Refined Proposal \small{(mostly unchanged from the original)}}
 
 \subsection*{Problem:}
+We solved the problem of evaluating mathematical expressions using a computer, which has the sub-problem of getting the computer to parse valid infix mathematical expressions (which a human would presumably input).
 
 \subsection*{Motivation:}
+Parsing mathematical expressions via computer is undoubtedly very useful since computers calculate much faster and with more precision than a human could.
+For mathematical expressions which are very long or contain large numbers, we save time and make fewer mistakes when a computer is used to evaluate the expressions.
+Even with our current ability to use calculators which already solve the problem detailed above, it would be academically fruitful to compare various solutions to the same problem.
 
 \subsection*{Features:}
+We will know we solved the problem when all three of our implementations are able to parse expressions correctly and evaluate the correct answer (see Tools) for all 100,000 entries in our generated dataset.
+Specific features include being able to evaluate mathematical expressions by typing them in yourself, being able to generate an arbitrary number of mathematical expressions with arbitrary depth, and finally to be able to mass evaluate all of the generated expressions (passed in as a \texttt{.csv} file) and time how long each implementation takes to crunch all of the numbers.
 
 \subsection*{Data:}
 
 \subsection*{Tools:}
+We used C++ to write our code, because of its object-oriented design, and because it represents a common language between us.
+We collaborated on our code using GitHub, and wrote our documentation in \LaTeX.
+We compiled our code using the GNU Compiler Collection (g++), and our build tool was be GNU Make.
+Finally, we preemptively evaluated each expression using Javascript (to verify our program has the correct output), because as an interpreted language it is proficient in evaluating expressions entered as strings.
 
-\subsection*{Data Structures:}
+\subsection*{Data Structures/Algorithms implemented and used:}
+The stack based evaluator had a primitive linked list implementation of a stack, with a minimal interface (it and its nodes were structs and the only functions written were to \texttt{push} and \texttt{pop}).
+The tree based evaluator generated a full abstract syntax tree without an interface (there were only nodes linked to either two children or no children).
+The tree evaluator's functions for evaluation handled building the full tree and traversing the tree.
+
+The priority queue based evaluator did not use a priority queue implemented from scratch (the other \textit{two} evaluators have original implementations), but used an algorithm thought of by Will, not Dijkstra.
+
+Both the stack based evaluator and the tree based evaluator used Sai's implementation of Dijkstra's shunting yard algorithm, tailored to fit each of these data structures.
+The method of evaluation of the expression after being converted to postfix form (evaluation uses stacks) or tree form was a different algorithm that used the properties of the stack or tree (traversal differences).
+
+Other data structures used in some form or another were the standard library stack (used in the tree evaluator, not the stack evaluator), priority queue, vector, unordered map, and unordered set.
 
 \subsection*{Responsibilities/Roles:}
+Saisudharshan (Sai) was responsible for the stack implementation and the tree implementation, the timing mechanism, the initial expression tokenizer/parser, and the template/structure of this document.
+Richard (Will) was responsible for the priority queue implementation, the command line interface, the random expression (with correct answers via Javascript) dataset generator ,the GitHub repository and the video.
+Both of us worked together on deciding the design choices for the project, as well as the documentation contents of course.
+
+\noindent\makebox[\linewidth]{\rule{19.1cm}{0.4pt}}
 
 \section*{Analysis}
 
 \subsection*{Changes:}
+We decided not to handle confirming if passed in expressions were valid or not, because of our time getting tighter and wanting to focus on the data structures and algorithms part of the project instead of the more ``front-end'' issues, at the cost of cleanliness/robustness.
+We also did not end up using the Catch2 framework to test our data since we already had Javascript to compare our calculators' answers to (surely for $100,000+$ random valid expressions evaluating correctly, it means we wrote the algorithms correctly).
+We also had a few responsibilities shift simply due to convenience/serendipity, but this did not change the amount of labor allocated to each person (we still maintained a 50/50 balance).
+There were also trivial changes to the visuals of the command line interface.
 
 \subsection*{Complexity Analysis:}
 
 \centerline{General}
 First, some variables should be defined.
-Let $o$ be the number of operators in an expression, $n$ be the number of operands (numbers) in the expression, $d$ be the depth of the expression (number of nested expressions), and $p$ be the number of open (or closed, as they must match) parentheses in the expression.
+Let $o$ be the number of operators in an expression, $n$ be the number of operands (numbers) in the expression, and $p$ be the number of open (or closed, as they must match) parentheses in the expression. Furthermore, let $\ell$ be the length of an infix expression passed into the program.
+
 These parsers only deal with binary operators. Each operator thus takes two operands, which can either be numbers or expressions involving operands and operators (excluding parentheses, which are treated separately from operators here).
 These expressions are subject to the same rules, which thus means that, for a given expression, $n=o+1$, and that $O(n)=O(o)$.
 Thus, these can effectively be used interchangably when analyzing complexity.
 
-Parentheses count is independent of $n$ and $o$, though expression depth can be in certain cases.
-Note that, in this context, depth is defined as the maximum ammount of nesting of expressions in a given expression, and is achieved with parentheses.
-Given a parentheses count $p$, the greatest depth which can be achieved is also $p$, which occurs when each subexpression contains a single subexpression itself.
-Examples include ($p=3$):
-\[(((5 + 3 * 2)))\]
-\[(((5) + 3 )* 2)\]
-Similarly, the lowest possible depth for a given $p$ arises from the pidgenhole principle, and equals 
-\[ ceil(\frac {p} {n}) \]
-Cases for these occur when parenthesis are as ``distributed'' as possible.
-The simplest case for this occurs when every number is ``wrapped'' once, but more parenthesis are in the expression, as seen:
-\[((5)) + (3) * (2) - (5) / (2)\]
-By pidgenhole, some numbers must be ``wrapped'' again to meet the given $p$.
-Admittedly, the fact that parenthesis can wrap multiple numbers complicates this a bit, but the intuition still holds.
-Thus, in the worst case $d$ is $O(p)$, while in the best case it is $O(p/n)$.
+\centerline{Parsing infix expressions}
+In the \texttt{Parser} class, infix expressions passed in as a string of length $\ell$ are tokenized, in the form of a vector (each element in the vector is a token).
+
+An \textbf{important} note about the form of these expressions: Every symbol and number (where numbers can be negative) must be separated from each other with a whitespace, because this would ensure that we do not have to decide whether the \texttt{-} sign is used to mean the unary operator or the binary operator.
+
+Returning to the complexity analysis, the time complexity of tokenizing the infix expression in all cases is $O(\ell)$.
+This is because we have to traverse through the string and extract characters, then push each into a vector.
+The vector representing the tokenized expression then has a size represented by what should be approximately $\ell / 2 = o + n + 2p$.
 
 \centerline{Priority Queue Implementation}
-The priority queue implementation has two primary sections.
+Will's priority queue implementation has two primary sections.
 The first constructs the operator priority queue from the expression, and constructs a new expression vector by removing the parentheses.
 The second recursively evaluates the new expression vector using this priority queue.
 
-In the first part, the expression vector reconstruction creates a vector of length $o + n - 2 p$.
-Because $push_back()$ in a vector is constant in time, this portion is $O(o-p)$ in the worst case.
-It also handles $2p$ parentheses in constant time, which is $O(p)$.
-Finally, it inserts $o$ operators into a priority queue, which is known to be $O(o*log(o))$ by a priority queue's properties in the worst case.
-Combining these portions together, the net complexity of this method is $O(o*log(o))$.
+In the first part, the expression vector reconstruction creates a vector of length $o + n$.
+Because \texttt{push\_back()} in a vector is constant in time, this portion is $O(o)$ in the worst case.
+It also handles $2p$ parentheses in constant time, which is $O(2p)$.
+Finally, it inserts $o$ operators into a priority queue, which is known to be $O(o\log(o))$ by a priority queue's properties in the worst case.
+Combining these portions together, the net complexity of this method is $O(o\log(o))$.
 
 In the second part, each operator is evaluated recursively.
 This recursion is analgous to a full binary tree, created on the stack, where each operator has two child expressions.
@@ -151,9 +155,23 @@ At each branch, the priority queue is broken into two priority queues: one for t
 However, depending on the position of the operator in the expression, and it's priority based on it's nesting, one child could contain many more operators than the other.
 If this happens recursively (for example, say each time the left child has 1 operator and the right child has the remaining), this constitutes the worst case.
 Intuitively speaking, this corresponds to a highly unbalanced tree.
-Each queue duplication will therefore take $O(o*log(o)$ to go through and $O(o*log(o))$ to reconstruct (this is in contrast to a best case, "balanced" tree, where each time the size of the queue would half - thus, the recursion would converge to the base cases more rapidly).
+Each queue duplication will therefore take $O(o\log(o))$ to go through and $O(o\log(o))$ to reconstruct (this is in contrast to a best case, "balanced" tree, where each time the size of the queue would halve - thus, the recursion would converge to the base cases more rapidly).
 This must happen for each operator, and all other portions of the recursion occur in constant time.
-Thus, the net complexity of this method is $O(o^2*log(o))$.
+Thus, the net complexity of this method is $O(o^2\log(o))$.
+
+\centerline{Stack Implementation}
+Then in Sai's stack based evaluator the complexity of converting the tokenized expression into postfix notation is going to be around $O(o+n+p) = O(o+p)$ (since $n=o+1$) in the worst case.
+This is because for each token we either send the token to the \texttt{postfix} vector or to the \texttt{operators} stack and later pop and potentially push onto the \texttt{postfix} vector (the shunting takes constant time complexity).
+Finally, to evaluate the postfix expression we use two stacks and then the complexity is $O(o+n) = O(o)$ since the length of the \texttt{postfix} vector must be $o+n$ (as there are no parentheses), and traversing through this vector leads to one of two situations (either push a number onto the stack or push the result of an operation on the top two items on the stack) which take constant time complexity each.
+Hence the overall time complexity of using the stack evaluator entirely is going to be $O(o+p)$ after tokenizing the infix expression.
+
+\centerline{Abstract Syntax Tree Implementation}
+In Sai's tree based evaluator we have a similar situation where a very similar algorithm is used to convert the tokenized expression into an abstract syntax tree.
+Again the same argument is used to claim that this part of the algorithm is $O(o+n+p)$ complexity, as again we traverse through the tokenized vector and either build a node in space freely, or build a node and link it to two children at some point, each of these taking constant time complexity.
+Then in actually evaluating the expression when it's in the form of an abstract syntax tree (containing $o+n$ nodes), we traverse to the bottom most node which has two numerical children and in constant time complexity replace the parent with the result of the operation on the children, and delete the children.
+This happens recursively, and so by design this node simplification should only occur as many times as there are ``operator'' nodes. We already stated above that the tree contains $o+n$ nodes, and clearly only $o$ of them are operator nodes. Hence the time complexity of traversing up the tree is $O(o)$. This means that the overall time complexity of using the tree based evaluator is again also $O(o+n+p)$, despite having a slightly slower runtime.
+
+\noindent\makebox[\linewidth]{\rule{19.1cm}{0.4pt}}
 
 \section*{Reflection}
 
@@ -165,5 +183,20 @@ Thus, the net complexity of this method is $O(o^2*log(o))$.
 
 \subsection*{What we learned:}
 
+\noindent\makebox[\linewidth]{\rule{19.1cm}{0.4pt}}
+
 \section*{References}
+Dijkstra, E. W. (1961, November). An ALGOL 60 Translator for the X1.
+
+Ginsburg, D., Groose, B., \& Taylor, J. (1997). Computer Algebra Systems.\\ \texttt{http://www.math.wpi.edu/IQP/BVCalcHist/calc5.html}.
+
+Landin, P. J. (1964). The mechanical evaluation of expressions.
+
+Stepan, N. (2001, September 10). Evaluate mathematical expressions quickly and accurately. IBM Developer.\\ \texttt{https://developer.ibm.com/languages/java/articles/j-w3eval/}.
+
+extra documents:
+
+https://www.cplusplus.com/reference/chrono/
+
+https://www.cplusplus.com/reference/cstdlib/strtod/
 \end{document}
