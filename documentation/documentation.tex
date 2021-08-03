@@ -56,8 +56,8 @@
 
 % paragraph indentation/spacing
 \setlength{\parindent}{0cm}
-\setlength{\parskip}{2pt}
-\renewcommand{\baselinestretch}{1.25}
+\setlength{\parskip}{1pt}
+\renewcommand{\baselinestretch}{1.2}
 
 % bracketing macro
 \newcommand{\br}[1]{\left(#1\right)}
@@ -188,7 +188,7 @@ This happens recursively, and so by design this node simplification should only 
 \centerline{Comparisons}
 Of the three approaches, it is clear that the priority queue-based one is the least efficient.
 Based on both theoretical analysis, where it ends up being $O(o^2\log(o)+p)$, and empirical run time, it is the least efficient.
-Perhaps improvements could be made, such as using a linked-list-based priority queue instead of a heap-based one (this would allow for faster traversals and copying), but in it\u2019s current state the other two algorithms are superior.
+Perhaps improvements could be made, such as using a linked-list-based priority queue instead of a heap-based one (this would allow for faster traversals and copying), but in its current state the other two algorithms are superior.
 Between the stack and abstract syntax tree approaches, it is difficult to affirmatively say.
 As noted in the prior analysis, the AST should be marginally faster (though both are $O(o + p)$), yet when the program runs the stack implementation consistently outperforms the AST implementation by a small amount.
 This may be due to the stack implementation using a custom linked-list-based stack, with the stack component of the AST implementation using the STL stack.
