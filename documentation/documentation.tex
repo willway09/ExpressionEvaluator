@@ -185,6 +185,16 @@ Again the same argument is used to claim that this part of the algorithm is $O(o
 Then in actually evaluating the expression when it's in the form of an abstract syntax tree (containing $o+n$ nodes), we traverse to the bottom most node which has two numerical children and in constant time complexity replace the parent with the result of the operation on the children, and delete the children.
 This happens recursively, and so by design this node simplification should only occur as many times as there are ``operator'' nodes. We already stated above that the tree contains $o+n$ nodes, and clearly only $o$ of them are operator nodes. Hence the time complexity of traversing up the tree is $O(o)$. This means that the overall time complexity of using the tree based evaluator is again also $O(o+n+p)$, despite having a slightly slower runtime.
 
+\centerline{Comparisons}
+Of the three approaches, it is clear that the priority queue-based one is the least efficient.
+Based on both theoretical analysis, where it ends up being $O(o^2\log(o)+p)$, and empirical run time, it is the least efficient.
+Perhaps improvements could be made, such as using a linked-list-based priority queue instead of a heap-based one (this would allow for faster traversals and copying), but in it\u2019s current state the other two algorithms are superior.
+Between the stack and abstract syntax tree approaches, it is difficult to affirmatively say.
+As noted in the prior analysis, the AST should be marginally faster (though both are $O(o + p)$), yet when the program runs the stack implementation consistently outperforms the AST implementation by a small amount.
+This may be due to the stack implementation using a custom linked-list-based stack, with the stack component of the AST implementation using the STL stack.
+Because the STL stack is array based, it liable to resizing, which can take time; this is not a problem with a linked list implementation.
+Nonetheless, it seems that both are perfectly sufficient solutions to the problem of evaluating expressions, and that both are unequivocally superior to the priority queue-based approach.
+
 \noindent\makebox[\linewidth]{\rule{19.1cm}{0.4pt}}
 
 \section*{Reflection}
