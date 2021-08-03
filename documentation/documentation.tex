@@ -68,41 +68,27 @@
 \setcounter{page}{1}
 
 \begin{document}
-\section{This is a section.}
-This is text, but this is \textit{inline} math: $2\exp(x), x\in\sbr{a,b}$. Observe that things which are usually taller are shrunk, like $\frac{1}{2}, \sum_k, \mathcal{E}\br{1-e^{\frac{-t}{RC}}}, \int_a^b f(x)\dd{x}$.
-
-This is more text, but we can follow with \textit{display mode} math that looks like \[\int_{\gamma}f(z)\dd{z} = 2\pi i \sum_k\Res(f,a_k) ,\] and we end the sentence here.
-
-\subsection{Test subsection}
-If we have a rather \textbf{large} expression for whatever reason, we can try splitting it over multiple lines.
-
-Observe that we can split \begin{multline*}
-    c_1\cos(4\log(x)) + c_2\sin(4\log(x)) -\br{1+\frac{1}{2}+\frac{1}{4}+\cdots+\frac{1}{2^k}} \\ +\exp(\int p(x)\dd{x}) + \eval{uv}_a^b - \int_a^b v\dd{u} + \lim_{\beta \to \infty}\frac{1}{2\pi i}\int_{\gamma - i\beta}^{\gamma + i\beta}e^{zt}f(z)\dd{z}
-\end{multline*} like so.
-
-We may even align several equations, at the \texttt{\&} symbol placed before the $=$ sign. \begin{align*}
-    c_1x+c_2y &= 0 \\
-    c_1x-c_2y &= 0
-\end{align*}
-
-\section{to conclude, one last item}
-I added a package which allows us to $\highlight{\text{highlight}}$ (default is pink) math. Here the math is actually text since I marked it as text, but we can highlight math in other colors; for example, \[\highlight[b]{O\br{f(n)-n^{7/6}}}.\]
-
-For now we can leave this here but when we begin documentation after everything is said and done, remove everything above this line. I am unsure what components above will be useful in our documentation but otherwise it should be good. \newpage
-
 \textbf{Team Name:} Team 27 \hspace*{1cm} \textbf{Team Members:} Saisudharshan Sivakumar, Richard McCoy
 
-\textbf{GitHub:} \href{https://github.com/}{link} \hspace*{1.7cm} \textbf{Video:} \href{https://youtube.com/}{link}
+\textbf{GitHub:} \href{https://github.com/willway09/FinalProject}{https://github.com/willway09/FinalProject} \textbf{Video:} \href{http://willmccoy.xyz/FinalProjectVideo.mp4}{http://willmccoy.xyz/FinalProjectVideo.mp4}
 
 \textbf{Project Title:} Expression Evaluation
 
-\section*{Refined Proposal}
+\noindent\makebox[\linewidth]{\rule{19.1cm}{0.4pt}}
+
+\section*{Refined Proposal \small{(mostly unchanged from the original)}}
 
 \subsection*{Problem:}
+We solved the problem of evaluating mathematical expressions using a computer, which has the sub-problem of getting the computer to parse valid infix mathematical expressions (which a human would presumably input).
 
 \subsection*{Motivation:}
+Parsing mathematical expressions via computer is undoubtedly very useful since computers calculate much faster and with more precision than a human could.
+For mathematical expressions which are very long or contain large numbers, we save time and make fewer mistakes when a computer is used to evaluate the expressions.
+Even with our current ability to use calculators which already solve the problem detailed above, it would be academically fruitful to compare various solutions to the same problem.
 
 \subsection*{Features:}
+We will know we solved the problem when all three of our implementations are able to parse expressions correctly and evaluate the correct answer (see Tools) for all 100,000 entries in our generated dataset.
+Specific features include being able to evaluate mathematical expressions by typing them in yourself, being able to generate an arbitrary number of mathematical expressions with arbitrary depth, and finally to be able to mass evaluate all of the generated expressions (passed in as a \texttt{.csv} file) and time how long each implementation takes to crunch all of the numbers.
 
 \subsection*{Data:}
 We randomly generated the mathematical expressions which we will test our code on.
@@ -111,6 +97,7 @@ We set a maximum depth for the recursion of 5, somewhat heuristically, because i
 This expression was then evaluated (using JavaScript - see \textbf{Tools}), and output along with the expression string in a CSV format.
 In this dataset, the first column contained the correct answers (as floating point values, though really as strings that needed to be parsed) contained the expressions (as strings).
 
+\subsection*{Tools:}
 We used C++ to write our code, because of its object-oriented design, and because it represents a common language between us.
 We collaborated on our code using GitHub, and wrote our documentation in \LaTeX.
 We compiled our code using the GNU Compiler Collection (g++), and our build tool was be GNU Make.
@@ -148,7 +135,8 @@ There were also trivial changes to the visuals of the command line interface.
 
 \centerline{General}
 First, some variables should be defined.
-Let $o$ be the number of operators in an expression, $n$ be the number of operands (numbers) in the expression, $d$ be the depth of the expression (number of nested expressions), and $p$ be the number of open (or closed, as they must match) parentheses in the expression.
+Let $o$ be the number of operators in an expression, $n$ be the number of operands (numbers) in the expression, and $p$ be the number of open (or closed, as they must match) parentheses in the expression. Furthermore, let $\ell$ be the length of an infix expression passed into the program.
+
 These parsers only deal with binary operators. Each operator thus takes two operands, which can either be numbers or expressions involving operands and operators (excluding parentheses, which are treated separately from operators here).
 These expressions are subject to the same rules, which thus means that, for a given expression, $n=o+1$, and that $O(n)=O(o)$.
 Thus, these can effectively be used interchangably when analyzing complexity.
@@ -163,7 +151,7 @@ This is because we have to traverse through the string and extract characters, t
 The vector representing the tokenized expression then has a size represented by what should be approximately $\ell / 2 = o + n + 2p$, because half the characters are spaces, which are rejected.
 
 \centerline{Priority Queue Implementation}
-The priority queue implementation has two primary sections.
+Will's priority queue implementation has two primary sections.
 The first constructs the operator priority queue from the expression, and constructs a new expression vector by removing the parentheses.
 The second recursively evaluates the new expression vector using this priority queue.
 
@@ -207,5 +195,20 @@ This happens recursively, and so by design this node simplification should only 
 
 \subsection*{What we learned:}
 
+\noindent\makebox[\linewidth]{\rule{19.1cm}{0.4pt}}
+
 \section*{References}
+Dijkstra, E. W. (1961, November). An ALGOL 60 Translator for the X1.
+
+Ginsburg, D., Groose, B., \& Taylor, J. (1997). Computer Algebra Systems.\\ \texttt{http://www.math.wpi.edu/IQP/BVCalcHist/calc5.html}.
+
+Landin, P. J. (1964). The mechanical evaluation of expressions.
+
+Stepan, N. (2001, September 10). Evaluate mathematical expressions quickly and accurately. IBM Developer.\\ \texttt{https://developer.ibm.com/languages/java/articles/j-w3eval/}.
+
+extra documents:
+
+https://www.cplusplus.com/reference/chrono/
+
+https://www.cplusplus.com/reference/cstdlib/strtod/
 \end{document}
