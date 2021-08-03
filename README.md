@@ -14,6 +14,7 @@ To compile the program, simply run `make`. The program can be executed in a stan
 # Video
 A video for the project can be seen here:
 <video controls>
-	<source src="willmccoy.xyz/FinalProjectVideo.mp4" type="video/mp4">
+	<source src="" type="video/mp4">
 	Your browser does not support the video tag.
+	![] (willmccoy.xyz/FinalProjectVideo.mp4)
 </video>
