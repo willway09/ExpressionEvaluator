@@ -161,7 +161,7 @@ In the first part, the expression vector reconstruction creates a vector of leng
 Because \texttt{push\_back()} in a vector is constant in time, this portion is $O(o)$ in the worst case.
 It also handles $2p$ parentheses in constant time, which is $O(p)$.
 Finally, it inserts $o$ operators into a priority queue, which is known to be $O(o\log(o))$ by a priority queue's properties in the worst case.
-Combining these portions together, the net complexity of this method is $O(o\log(o))$.
+Combining these portions together, the net complexity of this method is $O(o\log(o) + p)$.
 
 In the second part, each operator is evaluated recursively.
 This recursion is analgous to a full binary tree, created on the stack, where each operator has two child expressions.
@@ -171,7 +171,7 @@ If this happens recursively (for example, say each time the left child has 1 ope
 Intuitively speaking, this corresponds to a highly unbalanced tree.
 Each queue duplication will therefore take $O(o\log(o))$ to go through and $O(o\log(o))$ to reconstruct (this is in contrast to a best case, ``balanced'' tree, where each time the size of the queue would halve - thus, the recursion would converge to the base cases more rapidly).
 This must happen for each operator, and all other portions of the recursion occur in constant time.
-Thus, the net complexity of this method is $O(o^2\log(o))$.
+Thus, the net complexity of this method is $O(o^2\log(o) + p)$.
 
 \centerline{Stack Implementation}
 Then in Sai's stack based evaluator the complexity of converting the tokenized expression into postfix notation is going to be around $O(o+n+p) = O(o+p)$ (since $n=o+1$) in the worst case.

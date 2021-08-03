@@ -13,22 +13,22 @@ StackEval::Node::Node(std::string _binaryOperator) {
 	isNumber = false;
 }
 
-StackEval::smallStack::smallStack(){
+StackEval::smallStack::smallStack() {
 	top = nullptr;
 }
 
-void StackEval::smallStack::pop(){
-	if (top != nullptr) {
+void StackEval::smallStack::pop() {
+	if(top != nullptr) {
 		Node* temp = top;
 		top = top->prev;
 		delete temp;
 	}
 }
 
-void StackEval::smallStack::push(Node* node){
-		Node* temp = top;
-		top = node;
-		node->prev = temp;
+void StackEval::smallStack::push(Node* node) {
+	Node* temp = top;
+	top = node;
+	node->prev = temp;
 }
 
 // initialize precedenceMap
@@ -53,11 +53,13 @@ void StackEval::convert(const std::vector<std::string>& tokens, std::vector<Node
 
 		// determine if the token is a double
 		double number = std::strtod((*iter).c_str(), &end);
+
 		if(end != (*iter).c_str() && *end == '\0' && number != HUGE_VAL) {
 
 			// the token is a number
 			Node* numberNode = new Node(number);
 			postfix.push_back(numberNode);
+
 		} else if(StackEval::operators.count(*iter) != 0) {
 
 			// the token is instead an operator
@@ -66,24 +68,29 @@ void StackEval::convert(const std::vector<std::string>& tokens, std::vector<Node
 				postfix.push_back(shuntOp);
 				operators.pop();
 			}
+
 			Node* operatorNode = new Node(*iter);
 			operators.push(operatorNode);
+
 		} else if(*iter == "(") {
 
 			// the token is a left parenthesis
 			Node* operatorNode = new Node(*iter);
 			operators.push(operatorNode);
+
 		} else if(*iter == ")") {
-			
+
 			// the token is a right parenthesis
 			while(operators.top->binaryOperator != "(") {
 				Node* shuntOp = new Node(operators.top->binaryOperator);
 				postfix.push_back(shuntOp);
 				operators.pop();
 			}
+
 			operators.pop();
 		}
 	}
+
 	// move remaining operators
 	while(operators.top != nullptr) {
 		Node* shuntOp = new Node(operators.top->binaryOperator);
@@ -101,6 +108,7 @@ double StackEval::evaluate(const std::vector<std::string>& tokens) {
 
 	// parse expression
 	smallStack operands;
+
 	for(int i = 0; i < postfix.size(); i++) {
 
 		// determine if the token is a double
@@ -108,6 +116,7 @@ double StackEval::evaluate(const std::vector<std::string>& tokens) {
 
 			// the token is a number
 			operands.push(postfix[i]);
+
 		} else if(StackEval::operators.count(postfix[i]->binaryOperator) != 0) {
 
 			// the token is an operator
@@ -116,22 +125,28 @@ double StackEval::evaluate(const std::vector<std::string>& tokens) {
 			operands.pop();
 			double left = operands.top->value;
 			operands.pop();
+
 			if(postfix[i]->binaryOperator == "+") {
 				output = left + right;
+
 			} else if(postfix[i]->binaryOperator == "-") {
 				output = left - right;
+
 			} else if(postfix[i]->binaryOperator == "*") {
 				output = left * right;
+
 			} else if(postfix[i]->binaryOperator == "/") {
 				output = left / right;
+
 			} else if(postfix[i]->binaryOperator == "^") {
 				output = pow(left, right);
 			}
+
 			Node* outputNode = new Node(output);
 			operands.push(outputNode);
 		}
 	}
-	
+
 	double toReturn = operands.top->value;
 	operands.pop();
 	return toReturn;
