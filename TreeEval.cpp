@@ -43,7 +43,7 @@ TreeEval::Node* TreeEval::convert(const std::vector<std::string>& tokens) {
 			headstack.push(number);
 
 		} else if(TreeEval::operators.count(*iter) != 0) {
-			// assert that the non-number tokens are valid tokens; see Parser.cpp, link operators with higher precedence
+			// assert that the non-number tokens are valid tokens; link operators with higher precedence
 			while(operators.size() != 0 && operators.top() != "(" && (comparePrecedence(operators.top(), *iter) > 0 || (comparePrecedence(operators.top(), *iter) == 0 && *iter != "^"))) {
 				Node* right = headstack.top();
 				headstack.pop();
@@ -90,6 +90,7 @@ TreeEval::Node* TreeEval::convert(const std::vector<std::string>& tokens) {
 	return headstack.top();
 }
 
+// postorder traversal of tree, collapses operator nodes with two numerical children into the result of operator(left,right).
 void TreeEval::condenseTree(Node* head) {
 	if(head->left != nullptr && !(head->left->isNumber)) {
 		condenseTree(head->left);
@@ -125,7 +126,11 @@ void TreeEval::condenseTree(Node* head) {
 }
 
 double TreeEval::evaluate(const std::vector<std::string>& tokens) {
+
+	// convert into tree
 	Node* head = convert(tokens);
+
+	// evaluation
 	condenseTree(head);
 	return head->value;
 }
